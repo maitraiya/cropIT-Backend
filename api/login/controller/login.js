@@ -16,10 +16,12 @@ exports.login = asyncMiddleware(async(req, res) => {
     if (!alreadyCustomer) return res.status(400).send("User with this email doesn't exist");
     const validPass = await bcrypt.compare(loginInfo.password, alreadyCustomer.password);
     if (!validPass) return res.status(400).send('Invalid Password');
+    console.log('before', alreadyCustomer._id);
     const usertemp = new user({
-        id: alreadyCustomer.id,
+        _id: alreadyCustomer._id,
         userType: alreadyCustomer.userType
     });
-    const token = usertemp.generateAuthToken()
-    res.header('cropit-auth-token', token).status(200).send('Login successful!');
+    console.log('after', usertemp);
+    const token = usertemp.generateAuthToken();
+    res.header('cropit-auth-token', token).status(200).send('Login successfull!');
 });

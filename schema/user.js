@@ -53,8 +53,8 @@
       }
   });
 
-  userSchema.methods.generateAuthToken = function() {
-      const token = jwt.sign({ _id: this._id, userType: this.userType }, "123");
+  userSchema.methods.generateAuthToken = function(usertemp) {
+      const token = jwt.sign({ _id: this.id, userType: this.userType }, "123");
       return token;
   }
 
