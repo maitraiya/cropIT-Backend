@@ -26,7 +26,7 @@ function validateUserForUpdation(user) {
 function validateFarmer(farmer) {
     const schema = Joi.object({
         landArea: Joi.number().integer().required().error(new Error('Land Area field should only consist of Numeric.')),
-        material: Joi.string().regex(/^[a-zA-Z]*$/).min(5).max(250).required().error(new Error('Material field should only consist of Alphabets with min 5 and max 250 characters.')),
+        material: Joi.array().items(Joi.string().regex(/^[a-zA-Z0-9]*$/).min(5).max(250).required().error(new Error('Material field should only consist of Alphabets with min 5 and max 250 characters.'))),
     });
     return schema.validate(farmer);
 }
@@ -34,7 +34,7 @@ function validateFarmer(farmer) {
 function validateCompany(company) {
     const schema = Joi.object({
         domain: Joi.string().regex(/^[a-zA-Z]*$/).min(5).max(50).required().error(new Error('Domain field should only consist of Alphabets with min 5 and max 50 characters.')),
-        material: Joi.string().regex(/^[a-zA-Z]*$/).min(5).max(250).required().error(new Error('Material field should only consist of Alphabets with min 5 and max 250 characters.')),
+        material: Joi.array().items(Joi.string().regex(/^[a-zA-Z0-9]*$/).min(5).max(250).required().error(new Error('Material field should only consist of Alphabets with min 5 and max 250 characters.'))),
     });
     return schema.validate(company);
 }

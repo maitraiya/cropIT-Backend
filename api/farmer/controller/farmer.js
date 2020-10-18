@@ -41,17 +41,17 @@ exports.update = asyncMiddleware(async(req, res) => {
 });
 
 exports.getAllFarmers = asyncMiddleware(async(req, res) => {
-    let allFarmers = await farmer.find().populate('user');
+    let allFarmers = await farmer.find().populate('user').populate('material');
     if (allFarmers.length == 0) return res.status(200).send('No farmer record found!');
     return res.status(200).send(allFarmers);
 });
 exports.getFarmer = asyncMiddleware(async(req, res) => {
-    let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user');
+    let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user').populate('material');
     if (!farmerRecord) return res.status(200).send('No farmer record found!');
     return res.status(200).send(farmerRecord);
 });
 exports.deleteFarmer = asyncMiddleware(async(req, res) => {
-    let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user');
+    let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user').populate('material');
     if (!farmerRecord) return res.status(200).send('No Farmer record found!');
     await farmer.findByIdAndRemove(req.params.id);
     await user.findByIdAndRemove(farmerRecord.user._id);

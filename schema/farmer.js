@@ -7,10 +7,10 @@ const farmerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    material: {
-        type: String,
-        required: true,
-    },
+    material: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'material'
+    }],
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
 });
 

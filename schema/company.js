@@ -9,12 +9,10 @@ const companySchema = new mongoose.Schema({
         minlength: 5,
         maxlength: 50
     },
-    material: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 250
-    },
+    material: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'material'
+    }],
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
 });
 
