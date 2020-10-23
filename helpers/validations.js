@@ -47,9 +47,19 @@ function validateLogin(loginDetails) {
     return schema.validate(loginDetails);
 }
 
+function validatePosting(postingDetails) {
+    const schema = Joi.object({
+        cost: Joi.number().required().error(new Error('Please enter a valid amount')),
+        expiryDate: Joi.string().min(10).max(10).required().error(new Error('Please enter a valid date.')),
+        material: Joi.string().required().error(new Error('Please enter a valid material.'))
+    });
+    return schema.validate(postingDetails);
+}
+
 
 module.exports.validateCompany = validateCompany;
 module.exports.validateFarmer = validateFarmer;
 module.exports.validateUser = validateUser;
 module.exports.validateLogin = validateLogin;
 module.exports.validateUserForUpdation = validateUserForUpdation;
+module.exports.validatePosting = validatePosting;

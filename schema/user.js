@@ -53,10 +53,5 @@
       }
   });
 
-  userSchema.methods.generateAuthToken = function(usertemp) {
-      const token = jwt.sign({ _id: this.id, userType: this.userType }, "123");
-      return token;
-  }
-
   const user = mongoose.model("user", userSchema)
   module.exports.user = user;

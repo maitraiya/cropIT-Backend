@@ -30,10 +30,10 @@ exports.update = asyncMiddleware(async(req, res) => {
     if (req.body.material) {
         let materialExist = await material.findOne({ _id: req.params.id });
         if (materialExist) {
-            let materialObj = new material({
+            let materialObj = {
                 name: req.body.material.toLowerCase()
-            });
-            await materialExist.findOneAndUpdate({ id: materialExist._id }, materialObj);
+            };
+            await material.findOneAndUpdate({ _id: materialExist._id }, materialObj);
             return res.status(200).send(`Material updated succesfully`);
         } else return res.status(500).send('No materials to update');
     } else return res.status(500).send('No materials to update');
