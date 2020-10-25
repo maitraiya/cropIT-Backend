@@ -1,10 +1,17 @@
 const config = require('config');
 const { deal } = require("../../../schema/deal");
+const { posting } = require("../../../schema/posting");
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 const moment = require('moment');
+const { request } = require('express');
 
 exports.add = asyncMiddleware(async(req, res) => {
 
+    let postingDetails = posting.findOne({ _id: req.body.postingId });
+    if (!postingDetails) res.status(404).send("No posting found!");
+    let expiryDate = postingDetails.expiryDate;
+    if (moment(expiryDate).format("YYYY-MM-DD") > moment().format("YYYY-MM-DD"))
+        return res.status(400).send("Posting already expired!");
     let dealObj = new deal({
         postingId: req.body.postingId,
         addedBy: req.body.addedBy,
