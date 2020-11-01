@@ -1,14 +1,18 @@
 const { user } = require('../../../schema/user');
 const { company } = require('../../../schema/company');
 const { farmer } = require('../../../schema/farmer');
+const { renter } = require('../../../schema/renter');
+
 const { validateUser, validateFarmer, validateCompany } = require('../../../helpers/validations');
 const config = require('config');
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
+const tokenGenerator = require("../../../helpers/tokenGenerator");
+
 
 exports.register = asyncMiddleware(async(req, res) => {
-    if (!("user" in req.body && "company" in req.body || ("user" in req.body && "farmer" in req.body)))
+    if (!("user" in req.body && "company" in req.body || ("user" in req.body && "farmer" in req.body) || ("user" in req.body && "renter" in req.body)))
         return res.status(404).send("Invalid request")
 
     const userInfo = req.body.user;
@@ -42,8 +46,8 @@ exports.register = asyncMiddleware(async(req, res) => {
             user: usertemp._id
         });
         await companytemp.save();
-        const token = usertemp.generateAuthToken()
-        res.header('cropit-auth-token', token).send(_.pick(usertemp, ['_id', 'name', 'email']));
+        const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
+        res.header('cropit-auth-token', token).send("User registered successfully");
 
     } else if ("farmer" in req.body) {
         const farmerInfo = req.body.farmer;
@@ -57,7 +61,17 @@ exports.register = asyncMiddleware(async(req, res) => {
             user: usertemp._id
         });
         await farmertemp.save();
-        const token = usertemp.generateAuthToken()
-        res.header('cropit-auth-token', token).send(_.pick(usertemp, ['_id', 'name', 'email']));
+        const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
+        res.header('cropit-auth-token', token).send("User registered successfully");
+    } else if ("renter" in req.body) {
+        usertemp.userType = config.get('userType')[3];
+        await usertemp.save();
+        let renterTemp = new renter({
+            machines: null,
+            user: usertemp._id
+        });
+        await renterTemp.save();
+        const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
+        res.header('cropit-auth-token', token).send("User registered successfully");
     }
 });

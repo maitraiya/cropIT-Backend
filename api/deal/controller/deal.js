@@ -3,7 +3,6 @@ const { deal } = require("../../../schema/deal");
 const { posting } = require("../../../schema/posting");
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 const moment = require('moment');
-const { request } = require('express');
 
 exports.add = asyncMiddleware(async(req, res) => {
 

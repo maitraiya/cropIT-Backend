@@ -1,5 +1,6 @@
 {
     "PrivateKey": "cropit123",
     "db": "mongodb+srv://cropit:cropit@cluster-mumbai-server.340pk.mongodb.net/<dbname>?retryWrites=true&w=majority",
-    "userType": ["Admin", "Company", "Farmer"]
+    "userType": ["Admin", "Company", "Farmer", "Renter"],
+    "machineStatus": ["Open", "Busy"]
 }

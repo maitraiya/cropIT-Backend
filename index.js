@@ -8,6 +8,10 @@ const farmer = require('./api/farmer/routes/farmer');
 const company = require('./api/company/routes/company');
 const material = require('./api/material/routes/material');
 const posting = require('./api/posting/routes/posting');
+const deal = require('./api/deal/routes/deal');
+const renter = require('./api/renter/routes/renter');
+const machine = require('./api/machine/routes/machine');
+
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const db = require('./database/db');
@@ -25,6 +29,9 @@ app.use('/api/farmer', farmer);
 app.use('/api/company', company);
 app.use('/api/material', material);
 app.use('/api/posting', posting);
+app.use('/api/deal', deal);
+app.use('/api/renter', renter);
+app.use('/api/machine', machine);
 
 
 const port = process.env.PORT || 3000;

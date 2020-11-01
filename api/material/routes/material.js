@@ -8,8 +8,8 @@ const admin_company_farmer = require('../../../middleware/admin_company_farmer')
 
 router.post('/', [auth, admin], materialController.add);
 router.put('/:id', [auth, admin], materialController.update);
-router.get('/', [auth, admin_company_farmer], materialController.getAllMaterials);
-router.get('/:id', [auth, admin_company_farmer], materialController.getMaterial);
+router.get('/', materialController.getAllMaterials);
+router.get('/:id', materialController.getMaterial);
 router.delete('/:id', [auth, admin], materialController.deleteMaterial);
 
 module.exports = router;
