@@ -42,5 +42,5 @@ exports.login = asyncMiddleware(async (req, res) => {
         }
     }
     const token = tokenGenerator(userTemp);
-    res.status(200).json({ message: 'Login successfull!', token: token });
+    res.status(200).json({ message: 'Login successfull!', token: token, userType: alreadyCustomer.userType.toLowerCase() });
 });
