@@ -11,7 +11,7 @@ const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 const tokenGenerator = require("../../../helpers/tokenGenerator");
 
 
-exports.register = asyncMiddleware(async(req, res) => {
+exports.register = asyncMiddleware(async (req, res) => {
     if (!("user" in req.body && "company" in req.body || ("user" in req.body && "farmer" in req.body) || ("user" in req.body && "renter" in req.body)))
         return res.status(404).send("Invalid request")
 
@@ -47,7 +47,12 @@ exports.register = asyncMiddleware(async(req, res) => {
         });
         await companytemp.save();
         const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
-        res.header('cropit-auth-token', token).send("User registered successfully");
+        // res.header('cropit-auth-token', token).send("User registered successfully");
+        res.status(200).json({
+            message: 'User registered successfully',
+            'cropit-auth-token': token,
+            userType: 'company'
+        });
 
     } else if ("farmer" in req.body) {
         const farmerInfo = req.body.farmer;
@@ -62,7 +67,12 @@ exports.register = asyncMiddleware(async(req, res) => {
         });
         await farmertemp.save();
         const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
-        res.header('cropit-auth-token', token).send("User registered successfully");
+        // res.header('cropit-auth-token', token).send("User registered successfully");
+        res.status(200).json({
+            message: 'User registered successfully',
+            'cropit-auth-token': token,
+            userType: 'farmer'
+        });
     } else if ("renter" in req.body) {
         usertemp.userType = config.get('userType')[3];
         await usertemp.save();
@@ -72,6 +82,11 @@ exports.register = asyncMiddleware(async(req, res) => {
         });
         await renterTemp.save();
         const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
-        res.header('cropit-auth-token', token).send("User registered successfully");
+        // res.header('cropit-auth-token', token).send("User registered successfully");
+        res.status(200).json({
+            message: 'User registered successfully',
+            'cropit-auth-token': token,
+            userType: 'renter'
+        });
     }
 });
