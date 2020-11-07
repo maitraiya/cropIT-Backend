@@ -11,13 +11,15 @@ const posting = require('./api/posting/routes/posting');
 const deal = require('./api/deal/routes/deal');
 const renter = require('./api/renter/routes/renter');
 const machine = require('./api/machine/routes/machine');
+const rented = require('./api/rented/routes/rented');
+const scheduler = require('./helpers/backgroundChecker');
 
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const db = require('./database/db');
 const cors = require('./helpers/cors');
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(startup);
@@ -32,6 +34,7 @@ app.use('/api/posting', posting);
 app.use('/api/deal', deal);
 app.use('/api/renter', renter);
 app.use('/api/machine', machine);
+app.use('/api/rented', rented);
 
 
 const port = process.env.PORT || 3000;

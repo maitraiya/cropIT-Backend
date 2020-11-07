@@ -8,7 +8,7 @@ const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 
 exports.update = asyncMiddleware(async(req, res) => {
 
-    if (!("user" in req.body && "renter" in req.body))
+    if (!("user" in req.body))
         return res.status(404).send("Invalid request")
 
     const userInfo = req.body.user;
@@ -24,17 +24,9 @@ exports.update = asyncMiddleware(async(req, res) => {
         address: userInfo.address,
         city: userInfo.city
     }
+    await user.findOneAndUpdate({ _id: renterExist.user._id }, userUpdationObj);
+    return res.status(200).send('Renter record updated succesfully');
 
-    if ("renter" in req.body) {
-        const renterInfo = req.body.renter;
-
-        await user.findOneAndUpdate({ _id: renterExist.user._id }, userUpdationObj);
-        let renterUpdationObj = {
-            machines: renterInfo.machines
-        }
-        await renter.findOneAndUpdate({ _id: req.params.id }, renterUpdationObj);
-        return res.status(200).send('Renter record updated succesfully');
-    }
 });
 
 exports.getAllRenters = asyncMiddleware(async(req, res) => {

@@ -6,7 +6,8 @@ const renterSchema = new mongoose.Schema({
     machines: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'machine'
-    }]
+    }],
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
 });
 
 const renter = mongoose.model("renter", renterSchema)

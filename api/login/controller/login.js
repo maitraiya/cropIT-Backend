@@ -1,6 +1,7 @@
 const { user } = require('../../../schema/user');
 const { company } = require('../../../schema/company');
 const { farmer } = require('../../../schema/farmer');
+const { renter } = require('../../../schema/renter');
 
 const { validateLogin } = require('../../../helpers/validations');
 const tokenGenerator = require("../../../helpers/tokenGenerator");
@@ -21,7 +22,7 @@ exports.login = asyncMiddleware(async(req, res) => {
     if (!validPass) return res.status(400).send('Invalid Password');
     if (alreadyCustomer.userType == config.get("userType")[0]) {
         userTemp = {
-            _id: alreadyCustomer._id,
+            id: alreadyCustomer._id,
             userType: alreadyCustomer.userType
         };
     }
@@ -29,7 +30,7 @@ exports.login = asyncMiddleware(async(req, res) => {
         let companyDetails = await company.findOne({ user: alreadyCustomer._id })
         if (!companyDetails) return res.status(500).send("Internal Server Error!")
         userTemp = {
-            _id: companyDetails._id,
+            id: companyDetails._id,
             userType: alreadyCustomer.userType
         }
     }
@@ -38,6 +39,14 @@ exports.login = asyncMiddleware(async(req, res) => {
         if (!farmerDetails) return res.status(500).send("Internal Server Error!")
         userTemp = {
             id: farmerDetails._id,
+            userType: alreadyCustomer.userType
+        }
+    }
+    if (alreadyCustomer.userType == config.get("userType")[3]) {
+        let renterDetails = await renter.findOne({ user: alreadyCustomer._id })
+        if (!renterDetails) return res.status(500).send("Internal Server Error!")
+        userTemp = {
+            id: renterDetails._id,
             userType: alreadyCustomer.userType
         }
     }

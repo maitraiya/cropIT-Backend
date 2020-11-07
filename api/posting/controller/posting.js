@@ -1,10 +1,13 @@
 const config = require('config');
 const { posting } = require("../../../schema/posting");
 const { farmer } = require("../../../schema/farmer");
+const { user } = require("../../../schema/user");
+
 const bcrypt = require("bcrypt");
 const { validatePosting } = require('../../../helpers/validations');
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 const moment = require('moment');
+const transporter = require('../../../helpers/SMTP');
 
 exports.add = asyncMiddleware(async(req, res) => {
 
@@ -20,6 +23,25 @@ exports.add = asyncMiddleware(async(req, res) => {
             addedBy: req.token._id
         });
         await postingObj.save();
+        let farmersHavingMaterial = [];
+        let farmers = await farmer.find();
+        farmers.map(async(farmerInfo) => {
+            farmerInfo.material.map(async(data) => {
+                if (req.body.material == data)
+                    farmersHavingMaterial.push(farmerInfo.user);
+            })
+        })
+        await Promise.all(farmersHavingMaterial.map(async(data) => {
+            let tempUserInfo = await user.findOne({ _id: data });
+            var mailOptions = {
+                to: tempUserInfo.email,
+                subject: 'New Posting',
+                text: `You have got a new posting, Please login to CropIt portal for more details.`
+            };
+            try {
+                const result = await transporter.sendMail(mailOptions);
+            } catch (err) {}
+        }));
         return res.status(400).send("Posting added successfully.");
     } else return res.status(400).send("Please enter a valid date.");
 });

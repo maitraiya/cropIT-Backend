@@ -62,9 +62,22 @@ function validateMachine(machineDetails) {
         charges: Joi.number().required().error(new Error('Please enter a valid amount')),
         image: Joi.string().required().error(new Error("Please provide a valid image")),
         availabilityDate: Joi.string().required().error(new Error('Please enter a valid date')),
-        status: Joi.string().required().error(new Error('Please enter a valid status')),
+        status: Joi.string().error(new Error('Please enter a valid status')),
     });
     return schema.validate(machineDetails);
+}
+
+function validateRented(rentedDetails) {
+    const schema = Joi.object({
+        renter: Joi.string().required().error(new Error("Please enter a valid renter Id")),
+        farmer: Joi.string().required().error(new Error('Please enter a valid farmer Id')),
+        machine: Joi.string().required().error(new Error("Please provide a valid machine Id")),
+        fromDate: Joi.string().required().error(new Error('Please enter a valid start date')),
+        toDate: Joi.string().required().error(new Error('Please enter a valid end date')),
+        amount: Joi.string().error(new Error('Please enter a valid amount')),
+        status: Joi.string().error(new Error('Please enter a valid status')),
+    });
+    return schema.validate(rentedDetails);
 }
 
 
@@ -75,3 +88,4 @@ module.exports.validateLogin = validateLogin;
 module.exports.validateUserForUpdation = validateUserForUpdation;
 module.exports.validatePosting = validatePosting;
 module.exports.validateMachine = validateMachine;
+module.exports.validateRented = validateRented;
