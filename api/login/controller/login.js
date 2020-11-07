@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
 const config = require('config');
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 
-exports.login = asyncMiddleware(async(req, res) => {
+exports.login = asyncMiddleware(async (req, res) => {
     let userTemp = {};
     const loginInfo = req.body;
     const { error } = validateLogin(loginInfo);
@@ -51,5 +51,5 @@ exports.login = asyncMiddleware(async(req, res) => {
         }
     }
     const token = tokenGenerator(userTemp);
-    res.header('cropit-auth-token', token).status(200).send('Login successfull!');
+    res.status(200).json({ message: 'Login successfull!', token: token, userType: alreadyCustomer.userType.toLowerCase() });
 });
