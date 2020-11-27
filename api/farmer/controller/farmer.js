@@ -6,7 +6,7 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 
-exports.update = asyncMiddleware(async(req, res) => {
+exports.update = asyncMiddleware(async (req, res) => {
 
     if (!("user" in req.body && "farmer" in req.body))
         return res.status(404).send("Invalid request")
@@ -40,17 +40,17 @@ exports.update = asyncMiddleware(async(req, res) => {
     }
 });
 
-exports.getAllFarmers = asyncMiddleware(async(req, res) => {
+exports.getAllFarmers = asyncMiddleware(async (req, res) => {
     let allFarmers = await farmer.find().populate('user').populate('material');
     if (allFarmers.length == 0) return res.status(200).send('No farmer record found!');
     return res.status(200).send(allFarmers);
 });
-exports.getFarmer = asyncMiddleware(async(req, res) => {
-    let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user').populate('material');
+exports.getFarmer = asyncMiddleware(async (req, res) => {
+    let farmerRecord = await farmer.findOne({ user: { _id: req.params.id } }).populate('user').populate('material');
     if (!farmerRecord) return res.status(200).send('No farmer record found!');
     return res.status(200).send(farmerRecord);
 });
-exports.deleteFarmer = asyncMiddleware(async(req, res) => {
+exports.deleteFarmer = asyncMiddleware(async (req, res) => {
     let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user').populate('material');
     if (!farmerRecord) return res.status(200).send('No Farmer record found!');
     await farmer.findByIdAndRemove(req.params.id);
