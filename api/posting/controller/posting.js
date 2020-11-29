@@ -80,7 +80,7 @@ exports.getAllPosting = asyncMiddleware(async(req, res) => {
             let farmerMaterials = farmerDetails.material;
             if (farmerMaterials.length > 0) {
                 await Promise.all(farmerMaterials.map(async(data) => {
-                    let postingInfo = await posting.findOne({ "material": data });
+                    let postingInfo = await posting.findOne({ "material": data }).populate('material');
                     if (postingInfo && moment(postingInfo.expiryDate).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) postings.push(postingInfo);
                 }));
                 if (postings.length > 0) return res.status(200).send(postings);
