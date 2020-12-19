@@ -24,10 +24,17 @@ const machineSchema = new mongoose.Schema({
         required: true
     },
     ownedBy: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId
     }
 });
+machineSchema.virtual('renter', {
+    ref: 'renter',
+    localField: 'ownedBy',
+    foreignField: '_id',
+    justOne: true,
+});
+machineSchema.set('toObject', { virtuals: true });
+machineSchema.set('toJSON', { virtuals: true });
 
 const machine = mongoose.model("machine", machineSchema)
 module.exports.machine = machine;
