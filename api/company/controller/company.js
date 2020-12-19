@@ -46,7 +46,7 @@ exports.getAllcompanies = asyncMiddleware(async(req, res) => {
     return res.status(200).send(allcompanies);
 });
 exports.getcompany = asyncMiddleware(async(req, res) => {
-    let companyRecord = await company.findOne({ _id: req.params.id }).populate('user').populate('material');
+    let companyRecord = await company.findOne({ user: { _id: req.params.id } }).populate('user').populate('material');
     if (!companyRecord) return res.status(200).send('No company record found!');
     return res.status(200).send(companyRecord);
 });
