@@ -17,10 +17,18 @@ const postingSchema = new mongoose.Schema({
         maxlength: 10
     },
     addedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'company'
+        type: mongoose.Schema.Types.ObjectId
     }
 });
+
+postingSchema.virtual('company', {
+    ref: 'company',
+    localField: 'addedBy',
+    foreignField: '_id',
+    justOne: true,
+});
+postingSchema.set('toObject', { virtuals: true });
+postingSchema.set('toJSON', { virtuals: true });
 
 const posting = mongoose.model("posting", postingSchema)
 module.exports.posting = posting;

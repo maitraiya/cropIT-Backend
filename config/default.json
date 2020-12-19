@@ -6,5 +6,6 @@
     "rentStatus": ["Rented", "Returned"],
     "minRentDays": 5,
     "user": "maitraiya1997@gmail.com",
-    "password": "kiebjtwmvzrfjvct"
+    "password": "dcifgzvytctoajth",
+    "stubbleType": ["bajra", "barley", "cheak peas", "corn", "jawar", "jawar", "maize", "paddy", "rice", "soybean", "sugarcane", "wheat"]
 }

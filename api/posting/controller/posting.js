@@ -33,14 +33,16 @@ exports.add = asyncMiddleware(async(req, res) => {
         })
         await Promise.all(farmersHavingMaterial.map(async(data) => {
             let tempUserInfo = await user.findOne({ _id: data });
-            var mailOptions = {
-                to: tempUserInfo.email,
-                subject: 'New Posting',
-                text: `You have got a new posting, Please login to CropIt portal for more details.`
-            };
-            try {
-                const result = await transporter.sendMail(mailOptions);
-            } catch (err) {}
+            if (tempUserInfo) {
+                var mailOptions = {
+                    to: tempUserInfo.email,
+                    subject: 'New Posting',
+                    text: `You have got a new posting, Please login to CropIt portal for more details.`
+                };
+                try {
+                    const result = await transporter.sendMail(mailOptions);
+                } catch (err) {}
+            }
         }));
         return res.status(400).send("Posting added successfully.");
     } else return res.status(400).send("Please enter a valid date.");
@@ -70,7 +72,7 @@ exports.update = asyncMiddleware(async(req, res) => {
 exports.getAllPosting = asyncMiddleware(async(req, res) => {
     let allPostings;
     if (req.token.userType == config.get("userType")[1]) {
-        allPostings = await posting.find({ addedBy: req.token._id }).populate('material');
+        allPostings = await posting.find({ addedBy: req.token._id }).populate('material').populate({ path: 'company', populate: { path: 'user' } });
         if (allPostings.length == 0) return res.status(200).send('No posting record found!');
         return res.status(200).send(allPostings);
     } else if (req.token.userType == config.get("userType")[2]) {
@@ -80,7 +82,7 @@ exports.getAllPosting = asyncMiddleware(async(req, res) => {
             let farmerMaterials = farmerDetails.material;
             if (farmerMaterials.length > 0) {
                 await Promise.all(farmerMaterials.map(async(data) => {
-                    let postingInfo = await posting.findOne({ "material": data });
+                    let postingInfo = await posting.findOne({ "material": data }).populate('material').populate({ path: 'company', populate: { path: 'user' } });
                     if (postingInfo && moment(postingInfo.expiryDate).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) postings.push(postingInfo);
                 }));
                 if (postings.length > 0) return res.status(200).send(postings);
@@ -95,7 +97,7 @@ exports.getAllPosting = asyncMiddleware(async(req, res) => {
 });
 
 exports.getPosting = asyncMiddleware(async(req, res) => {
-    let postingRecord = await posting.findOne({ _id: req.params.id }).populate('material');
+    let postingRecord = await posting.findOne({ _id: req.params.id }).populate({ path: 'company', populate: { path: 'user' } });
     if (!postingRecord) return res.status(200).send('No posting record found!');
     return res.status(200).send(postingRecord);
 });

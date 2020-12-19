@@ -13,6 +13,7 @@ const renter = require('./api/renter/routes/renter');
 const machine = require('./api/machine/routes/machine');
 const rented = require('./api/rented/routes/rented');
 const scheduler = require('./helpers/backgroundChecker');
+const pricePredictor = require('./api/pricePrediction/routes/pricePrediction');
 
 const mongoose = require('mongoose');
 const helmet = require('helmet');
@@ -35,7 +36,7 @@ app.use('/api/deal', deal);
 app.use('/api/renter', renter);
 app.use('/api/machine', machine);
 app.use('/api/rented', rented);
-
+app.use('/api/pricePredictor', pricePredictor);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => { console.log(`Listening on ${port}`) });

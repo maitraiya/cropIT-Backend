@@ -1,2 +1,4 @@
 # dependencies
 /node_modules
+/api/pricePrediction/controller/venv
+/api/pricePrediction/controller/.idea
