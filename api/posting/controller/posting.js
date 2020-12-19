@@ -44,7 +44,7 @@ exports.add = asyncMiddleware(async (req, res) => {
                 } catch (err) { }
             }
         }));
-        return res.status(400).json("Posting added successfully.");
+        return res.status(200).json("Posting added successfully.");
     } else return res.status(400).json("Please enter a valid date.");
 });
 
