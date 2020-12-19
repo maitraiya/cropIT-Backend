@@ -57,12 +57,12 @@ exports.update = asyncMiddleware(async(req, res) => {
 });
 
 exports.getAllMachines = asyncMiddleware(async(req, res) => {
-    let allMachines = await machine.find();
+    let allMachines = await machine.find().populate({ path: 'renter', populate: { path: 'user' } });
     if (allMachines.length == 0) return res.status(200).send('No machine record found!');
     return res.status(200).send(allMachines);
 });
 exports.getMachine = asyncMiddleware(async(req, res) => {
-    let machineRecord = await machine.findOne({ _id: req.params.id });
+    let machineRecord = await machine.findOne({ _id: req.params.id }).populate({ path: 'renter', populate: { path: 'user' } });
     if (!machineRecord) return res.status(200).send('No machine record found!');
     return res.status(200).send(machineRecord);
 });
