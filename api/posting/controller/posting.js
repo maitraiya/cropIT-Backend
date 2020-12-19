@@ -71,12 +71,8 @@ exports.update = asyncMiddleware(async(req, res) => {
 
 exports.getAllPosting = asyncMiddleware(async(req, res) => {
     let allPostings;
-    if (req.token.userType == config.get("userType")[1]) { <<
-        << << < HEAD
-        allPostings = await posting.find({ addedBy: req.token._id }).populate('material').populate({ path: 'company', populate: { path: 'user' } }); ===
-        === =
-        allPostings = await posting.find({ addedBy: req.token._id }).populate('material').populate('addedBy'); >>>
-        >>> > f90e5ff831342043001d0593d8c968da6ec1d4bc
+    if (req.token.userType == config.get("userType")[1]) {
+        allPostings = await posting.find({ addedBy: req.token._id }).populate('material').populate({ path: 'company', populate: { path: 'user' } });
         if (allPostings.length == 0) return res.status(200).send('No posting record found!');
         return res.status(200).send(allPostings);
     } else if (req.token.userType == config.get("userType")[2]) {
