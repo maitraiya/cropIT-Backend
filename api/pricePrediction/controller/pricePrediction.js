@@ -4,7 +4,7 @@ const { posting } = require('../../../schema/posting');
 const { material } = require('../../../schema/materials');
 const { farmer } = require('../../../schema/farmer');
 const tokenGenerator = require('../../../helpers/tokenGenerator');
-
+const config = require('config');
 exports.predict = asyncMiddleware(async(req, res) => {
     const postingId = req.params.id;
     const postingDetails = await posting.findOne({ _id: postingId });
@@ -12,16 +12,20 @@ exports.predict = asyncMiddleware(async(req, res) => {
     const materialId = postingDetails.material;
     const materialDetails = await material.findOne({ _id: materialId });
     if (!materialDetails) return res.status(500).send("Internal server error");
-    const materialName = materialDetails.name;
+    let materialName = materialDetails.name;
+    materialName = "wheat";
     const farmerDetails = await farmer.findOne({ _id: req.token._id })
     if (!farmerDetails) return res.status(500).send("Internal server error");
-
+    let index = config.get('stubbleType').findIndex((material)=>{
+        return material == materialName;
+    })
+    
     let options = {
         mode: 'text',
         pythonPath: __dirname + '\\venv\\Scripts\\python.exe',
         scriptPath: __dirname, //If you are having python_test.py script in same folder, then it's optional. 
         pythonOptions: ['-u'], // get print results in real-time 
-        args: ['wheat', 7200, 1, 33]
+        args: [materialName, config.get('stubblePrice')[index],farmerDetails.landArea]
     };
     PythonShell.run('pricePrediction.py', options, function(err, result) {
         if (err) throw err;

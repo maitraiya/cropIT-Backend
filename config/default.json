@@ -7,5 +7,6 @@
     "minRentDays": 5,
     "user": "maitraiya1997@gmail.com",
     "password": "dcifgzvytctoajth",
-    "stubbleType": ["bajra", "barley", "cheak peas", "corn", "jawar", "jawar", "maize", "paddy", "rice", "soybean", "sugarcane", "wheat"]
+    "stubbleType": ["bajra", "barley", "cheak peas", "corn", "jawar", "maize", "paddy", "rice", "soybean", "sugarcane", "wheat"],
+    "stubblePrice":[6900,6300,3300,4200,6000,5100,9000,4800,3600,3600,5700]
 }
