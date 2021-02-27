@@ -7,14 +7,14 @@ const { validateRented } = require('../../../helpers/validations');
 
 exports.add = asyncMiddleware(async(req, res) => {
     const { error } = validateRented(req.body);
-    if (error) return res.status(400).send(error.message);
+    if (error) return res.status(400).json(error.message);
 
     const rentedDetails = req.body;
     diff = moment(rentedDetails.toDate).diff(moment(rentedDetails.fromDate), 'days');
-    if (diff < config.get("minRentDays")) return res.status(400).send(`Item should be rented for min ${config.get("minRentDays")} days`);
+    if (diff < config.get("minRentDays")) return res.status(400).json(`Item should be rented for min ${config.get("minRentDays")} days`);
 
     const machineDetails = await machine.findOne({ _id: rentedDetails.machine });
-    if (!machineDetails) return res.status(500).send("Internal Server Error");
+    if (!machineDetails) return res.status(500).json("Internal Server Error");
     let rentedInfo = new rented({
         renter: rentedDetails.renter,
         farmer: rentedDetails.farmer,
@@ -26,22 +26,22 @@ exports.add = asyncMiddleware(async(req, res) => {
     })
     await rentedInfo.save();
     await machine.findOneAndUpdate({ _id: machineDetails._id }, { status: config.get("machineStatus")[1] });
-    return res.status(200).send("Item rented successfully!");
+    return res.status(200).json("Item rented successfully!");
 });
 exports.update = asyncMiddleware(async(req, res) => {
     const { error } = validateRented(req.body);
-    if (error) return res.status(400).send(error.message);
+    if (error) return res.status(400).json(error.message);
 
     const rentedExists = await rented.findOne({ _id: req.params.id });
-    if (!rentedExists) return res.status(404).send("No rented recotrd found");
+    if (!rentedExists) return res.status(404).json("No rented recotrd found");
 
     const rentedDetails = req.body;
 
     diff = moment(rentedDetails.toDate).diff(moment(rentedDetails.fromDate), 'days');
-    if (diff < config.get("minRentDays")) return res.status(400).send(`Item should be rented for min ${config.get("minRentDays")} days`);
+    if (diff < config.get("minRentDays")) return res.status(400).json(`Item should be rented for min ${config.get("minRentDays")} days`);
 
     let machineDetails = await machine.findOne({ _id: rentedDetails.machine });
-    if (!machineDetails) return res.status(500).send("Internal Server Error");
+    if (!machineDetails) return res.status(500).json("Internal Server Error");
 
     let rentedInfo = {
         renter: rentedDetails.renter,
@@ -58,7 +58,7 @@ exports.update = asyncMiddleware(async(req, res) => {
     } else if (rentedDetails.status == config.get("rentStatus")[0]) {
         await machine.findOneAndUpdate({ _id: machineDetails._id }, { status: config.get("machineStatus")[1] });
     }
-    return res.status(200).send("Rented record updated successfully!");
+    return res.status(200).json("Rented record updated successfully!");
 });
 
 
@@ -66,22 +66,18 @@ exports.getAllRentedItems = asyncMiddleware(async(req, res) => {
     let allRentedItems;
     if (req.token.userType == config.get("userType")[3]) {
         allRentedItems = await rented.find({ renter: req.token._id }).populate('machine');
-        if (allRentedItems.length == 0) return res.status(200).send('No rented items found!');
-        return res.status(200).send(allRentedItems);
+        return res.status(200).json(allRentedItems);
     } else if (req.token.userType == config.get("userType")[2]) {
         allRentedItems = await rented.find({ farmer: req.token._id }).populate('machine');
-        if (allRentedItems.length == 0) return res.status(200).send('No rented items found!');
-        return res.status(200).send(allRentedItems);
+        return res.status(200).json(allRentedItems);
 
     } else if (req.token.userType == config.get("userType")[0]) {
         allRentedItems = await rented.find().populate('machine');
-        if (allRentedItems.length == 0) return res.status(200).send('No rented items found!');
-        return res.status(200).send(allRentedItems);
+        return res.status(200).json(allRentedItems);
     }
 });
 
 exports.getRentedItem = asyncMiddleware(async(req, res) => {
     let rentedRecord = await rented.findOne({ _id: req.params.id }).populate('machine');
-    if (!rentedRecord) return res.status(200).send('No rented item found!');
-    return res.status(200).send(rentedRecord);
+    return res.status(200).json(rentedRecord);
 });
