@@ -27,11 +27,19 @@ exports.predict = asyncMiddleware(async(req, res) => {
         pythonOptions: ['-u'], // get print results in real-time 
         args: [materialName, config.get('stubblePrice')[index],farmerDetails.landArea]
     };
-    PythonShell.run('pricePrediction.py', options, function(err, result) {
-        if (err) throw err;
-        // result is an array consisting of messages collected  
-        //during execution of script. 
-        console.log('result: ', result[result.length - 1]);
-        res.send(result[result.length - 1])
-    });
+    try{
+        PythonShell.run('pricePrediction.py', options, function(err, result) {
+            if (err){
+                res.send(""+parseInt(config.get('stubblePrice')[index])*parseInt(farmerDetails.landArea))
+            }
+            else{
+            // result is an array consisting of messages collected  
+            //during execution of script. 
+            console.log('result: ', result[result.length - 1]);
+            res.send(result[result.length - 1])
+            }
+        });    
+    }
+    catch(ex){
+    }
 });

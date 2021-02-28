@@ -81,7 +81,6 @@ exports.getAllPosting = asyncMiddleware(async (req, res) => {
             let farmerMaterials = farmerDetails.material;
             if (farmerMaterials.length > 0) {
                 await Promise.all(farmerMaterials.map(async (data) => {    
-                    console.log(data);                
                     let postingInfo = await posting.find({ "material": data }).populate('material').populate({ path: 'company', populate: { path: 'user' } });
                     if (postingInfo && moment(postingInfo.expiryDate).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) postings.push(postingInfo);
                 }));

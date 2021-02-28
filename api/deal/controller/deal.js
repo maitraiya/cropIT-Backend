@@ -17,7 +17,7 @@ exports.add = asyncMiddleware(async(req, res) => {
         acceptedBy: req.body.acceptedBy
     });
     await dealObj.save();
-    return res.status(400).json("Deal added successfully.");
+    return res.status(200).json("Deal added successfully.");
 });
 
 
