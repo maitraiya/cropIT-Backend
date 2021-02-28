@@ -24,7 +24,9 @@ exports.add = asyncMiddleware(async (req, res) => {
 exports.getAllDeals = asyncMiddleware(async (req, res) => {
     let allDeals;
     if (req.token.userType == config.get("userType")[1]) {
-        allDeals = await deal.find({ addedBy: req.token._id }).populate('posting');
+        allDeals = await deal.find({ addedBy: req.token._id })
+            .populate({ path: 'posting', populate: { path: 'material' } })
+            .populate({ path: 'acceptedBy', populate: { path: 'user' } });
         return res.status(200).json(allDeals);
     } else if (req.token.userType == config.get("userType")[2]) {
         allDeals = await deal.find({ acceptedBy: req.token._id })
