@@ -8,6 +8,7 @@ const { validatePosting } = require('../../../helpers/validations');
 const asyncMiddleware = require('../../../middleware/asyncMiddleware');
 const moment = require('moment');
 const transporter = require('../../../helpers/SMTP');
+const { USER_TYPE } = require('../../constants/app.constants');
 
 exports.add = asyncMiddleware(async (req, res) => {
 
@@ -71,10 +72,10 @@ exports.update = asyncMiddleware(async (req, res) => {
 
 exports.getAllPosting = asyncMiddleware(async (req, res) => {
     let allPostings;
-    if (req.token.userType == config.get("userType")[1]) {
+    if (req.token.userType == USER_TYPE.Company) {
         allPostings = await posting.find({ addedBy: req.token._id }).populate('material').populate({ path: 'company', populate: { path: 'user' } });
         return res.status(200).json(allPostings);
-    } else if (req.token.userType == config.get("userType")[2]) {
+    } else if (req.token.userType == USER_TYPE.Farmer) {
         let farmerDetails = await farmer.findOne({ _id: req.token._id });
         let postings = [];
         if (farmerDetails) {
@@ -88,7 +89,7 @@ exports.getAllPosting = asyncMiddleware(async (req, res) => {
                 else return res.status(200).json("No posting found");
             } else return res.status(400).json("No material found.");
         } else return res.status(400).json("Authentication error.");
-    } else if (req.token.userType == config.get("userType")[0]) {
+    } else if (req.token.userType == USER_TYPE.Admin) {
         allPostings = await posting.find().populate('material');
         if (allPostings.length == 0) return res.status(200).json('No posting record found!');
         return res.status(200).json(allPostings);
