@@ -46,7 +46,7 @@ exports.getAllFarmers = asyncMiddleware(async (req, res) => {
     return res.status(200).json(allFarmers);
 });
 exports.getFarmer = asyncMiddleware(async (req, res) => {
-    let farmerRecord = await farmer.findOne({ user: { _id: req.params.id } }).populate('user').populate('material');
+    let farmerRecord = await farmer.findOne({ _id: req.params.id }).populate('user').populate('material');
     if (!farmerRecord) return res.status(200).json({ message: 'No farmer record found!' });
     return res.status(200).json(farmerRecord);
 });
