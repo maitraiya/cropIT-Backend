@@ -22,7 +22,7 @@ exports.predict = asyncMiddleware(async(req, res) => {
     
     let options = {
         mode: 'text',
-        pythonPath: __dirname + '\\venv\\Scripts\\python.exe',
+        pythonPath: process.env.PYTHON,
         scriptPath: __dirname, //If you are having python_test.py script in same folder, then it's optional. 
         pythonOptions: ['-u'], // get print results in real-time 
         args: [materialName, config.get('stubblePrice')[index],farmerDetails.landArea]
