@@ -4,6 +4,7 @@ const config = require('config');
 const startup = require('./api/startup/routes/startup');
 const signup = require('./api/signup/routes/signup');
 const login = require('./api/login/routes/login');
+const forgotPassword = require('./api/forgotPassword/routes/forgotPassword');
 const farmer = require('./api/farmer/routes/farmer');
 const company = require('./api/company/routes/company');
 const material = require('./api/material/routes/material');
@@ -28,6 +29,7 @@ app.use(cors);
 
 app.use('/api/signup', signup);
 app.use('/api/login', login);
+app.use('/api/forgotPassword', forgotPassword);
 app.use('/api/farmer', farmer);
 app.use('/api/company', company);
 app.use('/api/material', material);

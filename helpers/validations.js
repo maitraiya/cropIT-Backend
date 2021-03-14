@@ -12,7 +12,15 @@ function validateUser(user) {
     });
     return schema.validate(user);
 }
+function validateUserForPasswordChange(user) {
+    const schema = Joi.object({
+        email: Joi.string().min(5).max(250).required().email().error(new Error('Please enter a valid email')),
+        password: Joi.string().min(5).max(1000).required().error(new Error('Password field should have min 5 and max 1000 characters.')),
+        confirmPassword: Joi.string().min(5).max(1000).required().error(new Error('Password field should have min 5 and max 1000 characters.'))
 
+    })
+    return schema.validate(user);
+}
 function validateUserForUpdation(user) {
     const schema = Joi.object({
         name: Joi.string().min(5).max(50).required().error(new Error('Name field should only consist of Alphabets with min 5 and max 50 characters.')),
@@ -89,3 +97,4 @@ module.exports.validateUserForUpdation = validateUserForUpdation;
 module.exports.validatePosting = validatePosting;
 module.exports.validateMachine = validateMachine;
 module.exports.validateRented = validateRented;
+module.exports.validateUserForPasswordChange = validateUserForPasswordChange;
