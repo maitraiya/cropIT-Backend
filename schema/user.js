@@ -50,7 +50,10 @@
       userType: {
           type: String,
           required: true
-      }
+      },
+      profile: {
+        type: String
+    }
   });
 
   const user = mongoose.model("user", userSchema)
