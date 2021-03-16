@@ -28,7 +28,8 @@ exports.register = asyncMiddleware(async (req, res) => {
         phone: userInfo.phone,
         address: userInfo.address,
         city: userInfo.city,
-        adhaar: userInfo.adhaar
+        adhaar: userInfo.adhaar,
+        profile: userInfo.profile
     });
 
     const salt = await bcrypt.genSalt(10);

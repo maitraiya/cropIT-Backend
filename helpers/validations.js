@@ -8,7 +8,8 @@ function validateUser(user) {
         phone: Joi.string().regex(/^[0-9]*$/).min(10).max(10).required().error(new Error('Phone field should only consist of Numeric with min and max 10 characters.')),
         address: Joi.string().min(5).max(1000).required().error(new Error('Address field should have min 5 and max 1000 characters.')),
         city: Joi.string().regex(/^[a-zA-Z]*$/).min(3).max(50).required().error(new Error('City field should only consist of Alphabets with min 3 and max 50 characters.')),
-        adhaar: Joi.string().regex(/^[0-9]*$/).min(12).max(12).required().error(new Error('Adhaar field should only consist of Numeric with min and max 12 characters.'))
+        adhaar: Joi.string().regex(/^[0-9]*$/).min(12).max(12).required().error(new Error('Adhaar field should only consist of Numeric with min and max 12 characters.')),
+        profile: Joi.string()
     });
     return schema.validate(user);
 }

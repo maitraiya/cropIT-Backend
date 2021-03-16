@@ -5,7 +5,7 @@ categorical_fetaures =['bajra', 'barley', 'cheak peas', 'cheak-peas', 'corn', 'j
 import joblib
 import os
 import sys
-os.system('pip install -r requirements.txt')
+from flask import Flask, request
 
 
 '''
@@ -31,15 +31,27 @@ regressor.fit(X,y)
 joblib.dump(regressor, 'model.pkl')
 joblib.dump(onehotencoder, 'oneHotEncoder.pkl')
 '''
+app = Flask(__name__)
+@app.route('/',methods = ['POST'])
+def getPredictedResult():
+    regressor = joblib.load('model.pkl')
+    onehotencoder = joblib.load('oneHotEncoder.pkl')
+    material = request.form['material']
+    basePrice = request.form['basePrice']
+    landArea = request.form['landArea']
 
-regressor = joblib.load('model.pkl')
-onehotencoder = joblib.load('oneHotEncoder.pkl')
+    test = [[material, int(basePrice), int(landArea)]]
+    index = categorical_fetaures.index(material)
+    test[0][0] = index
+    try:
+        test = onehotencoder.transform(test).toarray()
 
-test = [[sys.argv[1],int(sys.argv[2]),int(sys.argv[3])]]
-index = categorical_fetaures.index(sys.argv[1])
-test[0][0] = index
-test = onehotencoder.transform(test).toarray()
+        # Predicting the Test set results
+        y_pred = regressor.predict(test)
+        print(y_pred[0])
+        return {'result':y_pred[0]}
+    except:
+        return {'result':int(basePrice)*int(landArea)}
+if __name__ == '__main__':
+   app.run()
 
-#Predicting the Test set results
-y_pred = regressor.predict(test)
-print(y_pred[0])
