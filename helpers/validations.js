@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 
 function validateUser(user) {
     const schema = Joi.object({
-        name: Joi.string().regex(/^[a-zA-Z]*$/).min(5).max(50).required().error(new Error('Name field should only consist of Alphabets with min 5 and max 50 characters.')),
+        name: Joi.string().min(5).max(50).required().error(new Error('Name field should only consist of Alphabets with min 5 and max 50 characters.')),
         email: Joi.string().min(5).max(250).required().email().error(new Error('Please enter a valid email')),
         password: Joi.string().min(5).max(1000).required().error(new Error('Password field should have min 5 and max 1000 characters.')),
         phone: Joi.string().regex(/^[0-9]*$/).min(10).max(10).required().error(new Error('Phone field should only consist of Numeric with min and max 10 characters.')),
@@ -13,13 +13,22 @@ function validateUser(user) {
     });
     return schema.validate(user);
 }
+function validateUserForPasswordChange(user) {
+    const schema = Joi.object({
+        email: Joi.string().min(5).max(250).required().email().error(new Error('Please enter a valid email')),
+        password: Joi.string().min(5).max(1000).required().error(new Error('Password field should have min 5 and max 1000 characters.')),
+        confirmPassword: Joi.string().min(5).max(1000).required().error(new Error('Password field should have min 5 and max 1000 characters.'))
 
+    })
+    return schema.validate(user);
+}
 function validateUserForUpdation(user) {
     const schema = Joi.object({
-        name: Joi.string().regex(/^[a-zA-Z]*$/).min(5).max(50).required().error(new Error('Name field should only consist of Alphabets with min 5 and max 50 characters.')),
+        name: Joi.string().min(5).max(50).required().error(new Error('Name field should only consist of Alphabets with min 5 and max 50 characters.')),
         phone: Joi.string().regex(/^[0-9]*$/).min(10).max(10).required().error(new Error('Phone field should only consist of Numeric with min and max 10 characters.')),
         address: Joi.string().min(5).max(1000).required().error(new Error('Address field should have min 5 and max 1000 characters.')),
         city: Joi.string().regex(/^[a-zA-Z]*$/).min(3).max(50).required().error(new Error('City field should only consist of Alphabets with min 3 and max 50 characters.')),
+        profile: Joi.string()
     });
     return schema.validate(user);
 }
@@ -34,7 +43,7 @@ function validateFarmer(farmer) {
 
 function validateCompany(company) {
     const schema = Joi.object({
-        domain: Joi.string().regex(/^[a-zA-Z]*$/).min(5).max(50).required().error(new Error('Domain field should only consist of Alphabets with min 5 and max 50 characters.')),
+        domain: Joi.string().regex(/^[a-zA-Z]*$/).min(4).max(50).required().error(new Error('Domain field should only consist of Alphabets with min 5 and max 50 characters.')),
         material: Joi.array().items(Joi.string().regex(/^[a-zA-Z0-9]*$/).min(5).max(250).required().error(new Error('Material field should only consist of Alphabets with min 5 and max 250 characters.'))),
     });
     return schema.validate(company);
@@ -90,3 +99,4 @@ module.exports.validateUserForUpdation = validateUserForUpdation;
 module.exports.validatePosting = validatePosting;
 module.exports.validateMachine = validateMachine;
 module.exports.validateRented = validateRented;
+module.exports.validateUserForPasswordChange = validateUserForPasswordChange;

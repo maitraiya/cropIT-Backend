@@ -22,7 +22,8 @@ exports.update = asyncMiddleware(async (req, res, next) => {
         name: userInfo.name,
         phone: userInfo.phone,
         address: userInfo.address,
-        city: userInfo.city
+        city: userInfo.city,
+        profile: userInfo.profile
     }
 
     if ("company" in req.body) {

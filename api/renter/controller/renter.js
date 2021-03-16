@@ -22,7 +22,8 @@ exports.update = asyncMiddleware(async(req, res) => {
         name: userInfo.name,
         phone: userInfo.phone,
         address: userInfo.address,
-        city: userInfo.city
+        city: userInfo.city,
+        profile: userInfo.profile
     }
     await user.findOneAndUpdate({ _id: renterExist.user._id }, userUpdationObj);
     return res.status(200).send('Renter record updated succesfully');

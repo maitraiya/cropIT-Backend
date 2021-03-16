@@ -18,11 +18,27 @@ exports.predict = asyncMiddleware(async(req, res) => {
     let index = config.get('stubbleType').findIndex((material)=>{
         return material == materialName;
     })
-    let result = await axios.post('/',{
-        material:materialName,
-        basePrice:config.get('stubblePrice')[index],
-        landArea: farmerDetails.landArea
-    })
-    if(result) return res.status(200).send(result)
-    else return res.status(500).send("Internal Server Error")
+    
+    let options = {
+        mode: 'text',
+        pythonPath: process.env.PYTHON,
+        scriptPath: __dirname, //If you are having python_test.py script in same folder, then it's optional. 
+        pythonOptions: ['-u'], // get print results in real-time 
+        args: [materialName, config.get('stubblePrice')[index],farmerDetails.landArea]
+    };
+    try{
+        PythonShell.run('pricePrediction.py', options, function(err, result) {
+            if (err){
+                res.send(""+parseInt(config.get('stubblePrice')[index])*parseInt(farmerDetails.landArea))
+            }
+            else{
+            // result is an array consisting of messages collected  
+            //during execution of script. 
+            console.log('result: ', result[result.length - 1]);
+            res.send(result[result.length - 1])
+            }
+        });    
+    }
+    catch(ex){
+    }
 });
