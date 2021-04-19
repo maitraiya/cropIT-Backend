@@ -15,7 +15,7 @@ exports.update = asyncMiddleware(async (req, res, next) => {
     const { error } = validateUserForUpdation(req.body.user);
     if (error) return res.status(400).json(error.message);
 
-    let companyExist = await company.findOne({ user: { _id: req.params.id } }).populate('user');
+    let companyExist = await company.findOne({ _id: req.params.id }).populate('user');
     if (!companyExist) return res.status(404).json('No company record found!');
 
     let userUpdationObj = {
@@ -48,7 +48,7 @@ exports.getAllcompanies = asyncMiddleware(async (req, res) => {
 });
 
 exports.getcompany = asyncMiddleware(async (req, res) => {
-    let companyRecord = await company.findOne({ user: { _id: req.params.id } }).populate('user').populate('material');
+    let companyRecord = await company.findOne({ _id: req.params.id }).populate('user').populate('material');
     if (!companyRecord) return res.status(200).json('No company record found!');
     return res.status(200).json(companyRecord);
 });

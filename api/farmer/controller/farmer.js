@@ -15,7 +15,7 @@ exports.update = asyncMiddleware(async (req, res) => {
     const { error } = validateUserForUpdation(req.body.user);
     if (error) return res.status(400).json(error.message);
 
-    let farmerExist = await farmer.findOne({ user: { _id: req.params.id } }).populate('user');
+    let farmerExist = await farmer.findOne({ _id: req.params.id }).populate('user');
     if (!farmerExist) return res.status(404).json({ message: 'No farmer record found!' });
 
     let userUpdationObj = {
