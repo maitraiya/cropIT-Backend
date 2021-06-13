@@ -12,7 +12,7 @@ const tokenGenerator = require("../../../helpers/tokenGenerator");
 
 
 exports.register = asyncMiddleware(async (req, res) => {
-    if (!("user" in req.body && "company" in req.body || ("user" in req.body && "farmer" in req.body) || ("user" in req.body && "renter" in req.body)))
+    if (!("user" in req.body && "company" in req.body || ("user" in req.body && "farmer" in req.body) || ("user" in req.body && "renter" in req.body) || ("user" in req.body && "admin" in req.body)))
         return res.status(404).send("Invalid request")
 
     const userInfo = req.body.user;
@@ -88,6 +88,15 @@ exports.register = asyncMiddleware(async (req, res) => {
             message: 'User registered successfully',
             'cropit-auth-token': token,
             userType: 'renter'
+        });
+    } else if ("admin" in req.body) {
+        usertemp.userType = config.get('userType')[0];
+        await usertemp.save();
+        const token = tokenGenerator({ id: usertemp._id, userType: usertemp.userType });
+        res.status(200).json({
+            message: 'User registered successfully',
+            'cropit-auth-token': token,
+            userType: 'admin'
         });
     }
 });
