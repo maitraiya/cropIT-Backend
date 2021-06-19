@@ -8,7 +8,7 @@ colorama==0.4.0
 corenlp-protobuf==3.8.0
 cycler==0.10.0
 Cython==0.29.2
-Django==2.1.4
+Django==2.2.24
 et-xmlfile==1.0.1
 Flask==1.0.2
 gunicorn==19.9.0
